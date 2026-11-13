@@ -1,0 +1,144 @@
+<html>
+<head>
+    <title>Lecturer Management System</title>
+    <link rel="stylesheet" href="style-modern.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Lecturer Management System</h1>
+    <p>Administrator Dashboard</p>
+</header>
+
+<nav>
+    <a href="#dashboard">Dashboard</a>
+    <a href="#register">Register Lecturers</a>
+    <a href="#lecturers">Lecturer Records</a>
+    <a href="#accounts">Account Management</a>
+</nav>
+
+<main>
+
+    <!-- Dashboard -->
+    <section id="dashboard">
+        <h2>Dashboard</h2>
+
+        <div>
+            <h3>Total Lecturers</h3>
+            <p>25</p>
+        </div>
+
+        <div>
+            <h3>Active Accounts</h3>
+            <p>20</p>
+        </div>
+
+        <div>
+            <h3>Inactive Accounts</h3>
+            <p>5</p>
+        </div>
+    </section>
+
+    <!-- Lecturer Registration -->
+    <section id="register">
+        <h2>Register New Lecturer</h2>
+
+        <form id="lecturerForm">
+
+            <div>
+                <label for="lecturerID">Lecturer ID:</label>
+                <input type="text" id="lecturerID" name="lecturerID">
+            </div>
+
+            <div>
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName">
+            </div>
+
+            <div>
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email">
+            </div>
+
+            <div>
+                <label for="department">Department:</label>
+                <select id="department" name="department">
+                    <option value="">Select Department</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Business">Business</option>
+                    <option value="Mathematics">Mathematics</option>
+                </select>
+            </div>
+
+            <div>
+                <button type="submit">Register Lecturer</button>
+                <button type="reset">Clear Form</button>
+            </div>
+
+        </form>
+    </section>
+
+    <!-- Lecturer Records -->
+    <section id="lecturers">
+        <h2>Lecturer Records</h2>
+
+        <input
+            type="text"
+            id="searchLecturer"
+            placeholder="Search by lecturer name or ID..."
+        >
+
+        <table border="1">
+            <tr>
+                <th>Lecturer ID</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>Actions</th>
+            </tr>
+
+            <tr>
+                <td>LEC001</td>
+                <td>John Kamau</td>
+                <td>john@example.com</td>
+                <td>Computer Science</td>
+                <td>
+                    <button>Edit</button>
+                    <button>Delete</button>
+                </td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- Account Management -->
+    <section id="accounts">
+        <h2>Account Management</h2>
+
+        <table border="1">
+            <tr>
+                <th>Account ID</th>
+                <th>Lecturer Name</th>
+                <th>Username</th>
+                <th>Account Status</th>
+                <th>Actions</th>
+            </tr>
+
+            <tr>
+                <td>ACC001</td>
+                <td>John Kamau</td>
+                <td>johnkamau</td>
+                <td>Active</td>
+                <td>
+                    <button>Deactivate</button>
+                </td>
+            </tr>
+        </table>
+    </section>
+
+</main>
+
+<script src="script.js"></script>
+
+</body>
+</html>
