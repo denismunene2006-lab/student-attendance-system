@@ -3,83 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lecturer Management System</title>
+    <title>Student Attendance Management System</title>
     <link rel="stylesheet" href="style-modern.css">
 </head>
 <body>
 <header>
-    <h1>Lecturer Management System</h1>
+    <h1>Student Attendance Management System</h1>
     <p>Administrator Dashboard</p>
 </header>
-<nav aria-label="Main navigation">
-    <a href="#dashboard">Dashboard</a>
-    <a href="#register">Register Lecturers</a>
-    <a href="#lecturers">Lecturer Records</a>
-    <a href="#accounts">Account Management</a>
-</nav>
-<main>
-    <section id="dashboard">
-        <h2>Dashboard</h2>
-        <div><h3>Total Lecturers</h3><p id="totalLecturers">—</p></div>
-        <div><h3>Active Accounts</h3><p>—</p></div>
-        <div><h3>Inactive Accounts</h3><p>—</p></div>
-    </section>
-
-    <section id="register">
-        <h2>Register New Lecturer</h2>
-        <form id="lecturerForm">
-            <div>
-                <label for="lecturerID">Lecturer ID:</label>
-                <input type="text" id="lecturerID" name="lecturerID" required maxlength="40">
-            </div>
-            <div>
-                <label for="fullName">Full Name:</label>
-                <input type="text" id="fullName" name="fullName" required maxlength="100">
-            </div>
-            <div>
-                <label for="email">Email Address:</label>
-                <input type="email" id="email" name="email" required maxlength="254">
-            </div>
-            <div>
-                <label for="department">Department:</label>
-                <select id="department" name="department" required>
-                    <option value="">Select Department</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Business">Business</option>
-                    <option value="Mathematics">Mathematics</option>
-                </select>
-            </div>
-            <div>
-                <button type="submit">Register Lecturer</button>
-                <button type="reset">Clear Form</button>
-            </div>
-        </form>
-        <p id="lecturerFeedback" role="status" aria-live="polite"></p>
-    </section>
-
-    <section id="lecturers">
-        <h2>Lecturer Records</h2>
-        <label for="searchLecturer">Search lecturers</label>
-        <input type="search" id="searchLecturer" placeholder="Search by lecturer name or ID...">
-        <table>
-            <thead>
-                <tr>
-                    <th scope="col">Lecturer ID</th>
-                    <th scope="col">Full Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Department</th>
-                    <th scope="col">Actions</th>
-                </tr>
-            </thead>
-            <tbody id="lecturerRows"></tbody>
-        </table>
-    </section>
-
-    <section id="accounts">
-        <h2>Account Management</h2>
-        <p>Account management will be available after authentication and account APIs are implemented.</p>
-    </section>
-</main>
+<section id="loginPanel" aria-labelledby="loginHeading">
+    <h2 id="loginHeading">Sign in</h2>
+    <form id="loginForm">
+        <label for="loginEmail">Email</label>
+        <input id="loginEmail" name="email" type="email" autocomplete="username" required>
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" name="password" type="password" autocomplete="current-password" required>
+        <button type="submit">Sign in</button>
+    </form>
+    <p id="loginFeedback" role="status" aria-live="polite"></p>
+    <p>Initial administrator setup is performed once through the protected setup API. See README.</p>
+</section>
+<div id="app" hidden>
+    <nav aria-label="Main navigation">
+        <a href="#dashboard">Dashboard</a>
+        <a href="#register">Register Lecturers</a>
+        <a href="#lecturers">Lecturer Records</a>
+        <a href="#accounts">Account Management</a>
+        <button id="logoutButton" type="button">Sign out</button>
+    </nav>
+    <main>
+        <section id="dashboard">
+            <h2>Dashboard</h2>
+            <div><h3>Total Lecturers</h3><p id="totalLecturers">0</p></div>
+            <div><h3>Active Students</h3><p id="totalStudents">0</p></div>
+            <div><h3>Active Courses</h3><p id="totalCourses">0</p></div>
+            <div><h3>Attendance Sessions Today</h3><p id="sessionsToday">0</p></div>
+        </section>
+        <section id="register">
+            <h2>Register New Lecturer</h2>
+            <form id="lecturerForm">
+                <div><label for="lecturerID">Lecturer ID:</label><input type="text" id="lecturerID" required maxlength="40"></div>
+                <div><label for="fullName">Full Name:</label><input type="text" id="fullName" required maxlength="100"></div>
+                <div><label for="email">Email Address:</label><input type="email" id="email" required maxlength="254"></div>
+                <div><label for="department">Department:</label><input type="text" id="department" required maxlength="100"></div>
+                <div><button type="submit">Register Lecturer</button><button type="reset">Clear Form</button></div>
+            </form>
+            <p id="lecturerFeedback" role="status" aria-live="polite"></p>
+        </section>
+        <section id="lecturers">
+            <h2>Lecturer Records</h2>
+            <label for="searchLecturer">Search lecturers</label>
+            <input type="search" id="searchLecturer" placeholder="Search by lecturer name or ID...">
+            <table><thead><tr><th scope="col">Lecturer ID</th><th scope="col">Full Name</th><th scope="col">Email</th><th scope="col">Department</th><th scope="col">Actions</th></tr></thead><tbody id="lecturerRows"></tbody></table>
+        </section>
+        <section id="accounts">
+            <h2>Account Management</h2>
+            <p>Use the admin-only <code>POST /api/users</code> endpoint to create staff login accounts. No sample accounts are included.</p>
+        </section>
+    </main>
+</div>
 <script src="script.js" defer></script>
 </body>
 </html>
