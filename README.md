@@ -1,79 +1,32 @@
 # Student Attendance Management System
 
-Node.js/Express API and browser UI backed by MongoDB. The app includes lecturer, student, course, enrollment, user-authentication, attendance-session and attendance-record APIs. This is a functional foundation; review security, validation, tests and school-specific requirements before production use.
+Node.js/Express API and browser admin dashboard backed by MongoDB. The dashboard now supports lecturer/student/course records and student course enrollment. Student/course/attendance API routes are also available. This is a functional foundation, not a production security certification.
 
-## Local setup
+## Local setup and initial admin
 
-1. Install Node.js 20+ and create a MongoDB Atlas database/user. Allow your development IP address in Atlas Network Access.
-2. Copy `.env.example` to `.env`; set `MONGO_URI`, `JWT_SECRET` (random, at least 32 characters), and `BOOTSTRAP_ADMIN_KEY` (a separate random secret). Do not commit `.env`.
-3. Run `npm install` then `npm start`; open `http://localhost:5000`.
-4. Create the first admin once using curl (replace values; send secrets securely):
+1. Use Node.js 20+ and a MongoDB Atlas database/user. Allow your development IP in Atlas Network Access.
+2. Copy `.env.example` to `.env`; configure `MONGO_URI`, a random `JWT_SECRET` (>=32 chars) and a separate random `BOOTSTRAP_ADMIN_KEY`. Never commit `.env`.
+3. Run `npm install`, then `npm start`, and browse to `http://localhost:5000`.
+4. Set the temporary bootstrap secret in the environment and call `POST /api/auth/setup` once with `x-bootstrap-key`. See the exact curl example earlier in the repository history or `docs/` guidance. Immediately remove that environment variable after the first admin is created.
+5. Login in the web UI. Admins can add/edit/delete lecturers, students, and courses, and enroll students into courses. There are no seeded/demo records.
 
-   ```bash
-   curl -X POST http://localhost:5000/api/auth/setup \
-     -H 'Content-Type: application/json' \
-     -H 'x-bootstrap-key: YOUR_BOOTSTRAP_ADMIN_KEY' \
-     -d '{"name":"School Administrator","email":"admin@example.com","password":"use-a-long-unique-password"}'
-   ```
+## API summary
 
-   Setup is refused once any user exists. Keep the bootstrap key private; remove `BOOTSTRAP_ADMIN_KEY` from Render after setup. Sign in at the site using the created admin. Admin passwords must be at least 12 characters.
+- `POST /api/auth/setup`, `POST /api/auth/login`, `GET /api/auth/me`
+- Admin: `/api/dashboard`, `/api/users`, lecturer/student/course CRUD
+- Admin enrollment: `POST /api/courses/:id/enroll`, `GET /api/courses/:id/students`
+- Admin attendance: session create/list, record upsert/read, and report endpoints under `/api/attendance`
+- `GET /api/health`
 
-## API overview
+Protected endpoints use `Authorization: Bearer <JWT>`. Use MongoDB ObjectIds in enrollment and attendance APIs; human-readable IDs are separate fields.
 
-All routes below require `Authorization: Bearer <token>` unless noted. Login and one-time setup are public; user/course/student writes require admin role. Attendance routes require an authenticated account.
+## Render Web Service settings
 
-- `POST /api/auth/setup` — one-time first-admin creation; `x-bootstrap-key` header required
-- `POST /api/auth/login` — `{ "email", "password" }`; returns token and user
-- `GET /api/auth/me` — current account
-- `POST /api/users` — admin creates account `{ "name", "email", "password", "role": "lecturer"|"admin" }`
-- `GET /api/users` — admin list accounts
-- `GET /api/dashboard` — real database counts, no seeded/sample totals
-- `GET|POST /api/lecturers`; `PUT|DELETE /api/lecturers/:id` — create/list/update/delete lecturer; writes are admin-only
-- `GET|POST /api/students`; `PUT|DELETE /api/students/:id` — student CRUD; writes are admin-only
-- `GET|POST /api/courses`; `PUT|DELETE /api/courses/:id` — course CRUD; writes are admin-only
-- `POST /api/courses/:id/enroll` — admin enrolls `{ "studentIds": ["MongoDB Student ID", ...] }`
-- `GET /api/courses/:id/students` — list enrolled students
-- `POST /api/attendance/sessions` — create session `{ "courseId", "title", "sessionDate" }`; date optional
-- `GET /api/attendance/sessions?courseId=...` — list sessions
-- `POST /api/attendance/sessions/:id/records` — submit `{ "records": [{ "studentId": "MongoDB Student ID", "status": "present|absent|late|excused", "note": "optional" }] }`; upserts marks and checks course enrollment
-- `GET /api/attendance/sessions/:id/records` — list marks for a session
-- `GET /api/attendance/report?courseId=...` — recent attendance records, optionally filtered by course
-- `GET /api/health` — service/database status
+Runtime Node; root directory repository root; build command `npm install`; start command `npm start`; health check `/api/health`. Set `MONGO_URI`, `JWT_SECRET` (strong unique random secret >=32 chars), and `NODE_ENV=production`. Set `BOOTSTRAP_ADMIN_KEY` only for first-admin setup then remove it. Leave `PORT` unset; Render injects it. Leave `CLIENT_ORIGIN` unset when frontend and API are the same Render service.
 
-The API uses MongoDB ObjectIds for `studentIds`, `courseId`, and route `:id` values; these are not the human-readable student/course codes. Create students/courses first, enroll students, create a session, then mark attendance.
+## Test and review docs
 
-## Exact Render Web Service settings
+- [API/MongoDB pre-deployment checklist](docs/api-test-checklist.md)
+- [Pre-deployment security review and blocking follow-ups](docs/security-review.md)
 
-Create a **Web Service** from this repository and branch `add-mongodb-render-backend` (or the branch you intend to deploy). Use:
-
-| Render setting | Value |
-| --- | --- |
-| Runtime | Node |
-| Root Directory | Leave blank (repository root) |
-| Build Command | `npm install` |
-| Start Command | `npm start` |
-| Health Check Path | `/api/health` |
-| Auto-Deploy | On, if desired |
-
-Add these environment variables in the service's **Environment** tab:
-
-| Key | Value |
-| --- | --- |
-| `MONGO_URI` | MongoDB Atlas connection string for the production database, including database name |
-| `JWT_SECRET` | A randomly generated secret with at least 32 characters; keep private |
-| `BOOTSTRAP_ADMIN_KEY` | A different randomly generated secret; remove after creating initial admin |
-| `NODE_ENV` | `production` |
-| `CLIENT_ORIGIN` | Leave unset for the bundled same-origin frontend. If separately hosted, set its exact HTTPS origin (comma-separated for multiple origins). |
-| `PORT` | Do not set manually; Render provides it and the server reads it automatically. |
-
-For Atlas, create a database user with only the required database permissions and configure Network Access for the Render service according to your Atlas plan and security policy. Do not put database credentials or JWT secrets in frontend files. After deploy, call `/api/auth/setup` once with the bootstrap key and then remove that key from Render. Never use a real school dataset until authentication, access policies, backups, audit requirements and deployment settings have been reviewed.
-
-## Data and demo content
-
-No demo lecturer, student, course, account or attendance records are inserted by the app. Database collections are created as records are written. The dashboard reads current database counts. Existing MongoDB data is not automatically deleted by deployment; back it up and explicitly remove unwanted records only if you intend to.
-
-## Still to do before production
-
-- Build student/course/enrollment and attendance management screens (the current browser UI demonstrates sign-in and lecturer management; APIs are available for the other workflows).
-- Add rate limiting, stronger input validation, automated tests, audit logging, pagination and school-specific authorization/lecturer-course assignment.
-- Configure backups, monitoring, HTTPS/custom domain as needed, and review privacy/legal obligations for student data.
+Important security caveat: because lecturer-to-course assignment has not been modeled, this branch conservatively restricts all records and attendance APIs to administrator accounts. Add course-scoped lecturer permissions before enabling lecturer access. Do not import real student information until security/privacy review, authorization testing, backups, and remaining review items are addressed.

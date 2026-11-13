@@ -21,44 +21,69 @@
         <button type="submit">Sign in</button>
     </form>
     <p id="loginFeedback" role="status" aria-live="polite"></p>
-    <p>Initial administrator setup is performed once through the protected setup API. See README.</p>
 </section>
 <div id="app" hidden>
     <nav aria-label="Main navigation">
         <a href="#dashboard">Dashboard</a>
-        <a href="#register">Register Lecturers</a>
-        <a href="#lecturers">Lecturer Records</a>
-        <a href="#accounts">Account Management</a>
+        <a href="#lecturers">Lecturers</a>
+        <a href="#students">Students</a>
+        <a href="#courses">Courses</a>
+        <a href="#enrollments">Enrollments</a>
         <button id="logoutButton" type="button">Sign out</button>
     </nav>
     <main>
         <section id="dashboard">
             <h2>Dashboard</h2>
-            <div><h3>Total Lecturers</h3><p id="totalLecturers">0</p></div>
+            <div><h3>Lecturers</h3><p id="totalLecturers">0</p></div>
             <div><h3>Active Students</h3><p id="totalStudents">0</p></div>
             <div><h3>Active Courses</h3><p id="totalCourses">0</p></div>
             <div><h3>Attendance Sessions Today</h3><p id="sessionsToday">0</p></div>
         </section>
-        <section id="register">
-            <h2>Register New Lecturer</h2>
-            <form id="lecturerForm">
-                <div><label for="lecturerID">Lecturer ID:</label><input type="text" id="lecturerID" required maxlength="40"></div>
-                <div><label for="fullName">Full Name:</label><input type="text" id="fullName" required maxlength="100"></div>
-                <div><label for="email">Email Address:</label><input type="email" id="email" required maxlength="254"></div>
-                <div><label for="department">Department:</label><input type="text" id="department" required maxlength="100"></div>
-                <div><button type="submit">Register Lecturer</button><button type="reset">Clear Form</button></div>
-            </form>
-            <p id="lecturerFeedback" role="status" aria-live="polite"></p>
-        </section>
         <section id="lecturers">
             <h2>Lecturer Records</h2>
-            <label for="searchLecturer">Search lecturers</label>
-            <input type="search" id="searchLecturer" placeholder="Search by lecturer name or ID...">
-            <table><thead><tr><th scope="col">Lecturer ID</th><th scope="col">Full Name</th><th scope="col">Email</th><th scope="col">Department</th><th scope="col">Actions</th></tr></thead><tbody id="lecturerRows"></tbody></table>
+            <form id="lecturerForm">
+                <div><label for="lecturerID">Lecturer ID</label><input id="lecturerID" required maxlength="40"></div>
+                <div><label for="lecturerName">Full name</label><input id="lecturerName" required maxlength="100"></div>
+                <div><label for="lecturerEmail">Email</label><input id="lecturerEmail" type="email" required maxlength="254"></div>
+                <div><label for="lecturerDepartment">Department</label><input id="lecturerDepartment" required maxlength="100"></div>
+                <div><button type="submit">Add lecturer</button></div>
+            </form>
+            <p id="lecturerFeedback" role="status" aria-live="polite"></p>
+            <label for="searchLecturer">Search lecturers</label><input type="search" id="searchLecturer">
+            <div class="table-wrap"><table><thead><tr><th>Lecturer ID</th><th>Name</th><th>Email</th><th>Department</th><th>Actions</th></tr></thead><tbody id="lecturerRows"></tbody></table></div>
         </section>
-        <section id="accounts">
-            <h2>Account Management</h2>
-            <p>Use the admin-only <code>POST /api/users</code> endpoint to create staff login accounts. No sample accounts are included.</p>
+        <section id="students">
+            <h2>Student Records</h2>
+            <form id="studentForm">
+                <div><label for="studentID">Student ID</label><input id="studentID" required maxlength="40"></div>
+                <div><label for="studentName">Full name</label><input id="studentName" required maxlength="100"></div>
+                <div><label for="studentEmail">Email (optional)</label><input id="studentEmail" type="email" maxlength="254"></div>
+                <div><label for="studentDepartment">Department (optional)</label><input id="studentDepartment" maxlength="100"></div>
+                <div><button type="submit">Add student</button></div>
+            </form>
+            <p id="studentFeedback" role="status" aria-live="polite"></p>
+            <label for="searchStudent">Search students</label><input type="search" id="searchStudent">
+            <div class="table-wrap"><table><thead><tr><th>Student ID</th><th>Name</th><th>Email</th><th>Department</th><th>Status</th><th>Actions</th></tr></thead><tbody id="studentRows"></tbody></table></div>
+        </section>
+        <section id="courses">
+            <h2>Courses</h2>
+            <form id="courseForm">
+                <div><label for="courseCode">Course code</label><input id="courseCode" required maxlength="30"></div>
+                <div><label for="courseTitle">Title</label><input id="courseTitle" required maxlength="120"></div>
+                <div><label for="courseDescription">Description (optional)</label><input id="courseDescription" maxlength="1000"></div>
+                <div><button type="submit">Add course</button></div>
+            </form>
+            <p id="courseFeedback" role="status" aria-live="polite"></p>
+            <div class="table-wrap"><table><thead><tr><th>Code</th><th>Course</th><th>Description</th><th>Status</th><th>Actions</th></tr></thead><tbody id="courseRows"></tbody></table></div>
+        </section>
+        <section id="enrollments">
+            <h2>Enroll students in a course</h2>
+            <form id="enrollmentForm">
+                <div><label for="enrollmentCourse">Course</label><select id="enrollmentCourse" required><option value="">Load courses first</option></select></div>
+                <div><label for="enrollmentStudents">Students (use Ctrl/Cmd to select multiple)</label><select id="enrollmentStudents" multiple required size="6"></select></div>
+                <div><button type="submit">Enroll selected students</button></div>
+            </form>
+            <p id="enrollmentFeedback" role="status" aria-live="polite"></p>
         </section>
     </main>
 </div>
