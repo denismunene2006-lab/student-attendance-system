@@ -1,144 +1,85 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lecturer Management System</title>
     <link rel="stylesheet" href="style-modern.css">
 </head>
-
 <body>
-
 <header>
     <h1>Lecturer Management System</h1>
     <p>Administrator Dashboard</p>
 </header>
-
-<nav>
+<nav aria-label="Main navigation">
     <a href="#dashboard">Dashboard</a>
     <a href="#register">Register Lecturers</a>
     <a href="#lecturers">Lecturer Records</a>
     <a href="#accounts">Account Management</a>
 </nav>
-
 <main>
-
-    <!-- Dashboard -->
     <section id="dashboard">
         <h2>Dashboard</h2>
-
-        <div>
-            <h3>Total Lecturers</h3>
-            <p>25</p>
-        </div>
-
-        <div>
-            <h3>Active Accounts</h3>
-            <p>20</p>
-        </div>
-
-        <div>
-            <h3>Inactive Accounts</h3>
-            <p>5</p>
-        </div>
+        <div><h3>Total Lecturers</h3><p id="totalLecturers">—</p></div>
+        <div><h3>Active Accounts</h3><p>—</p></div>
+        <div><h3>Inactive Accounts</h3><p>—</p></div>
     </section>
 
-    <!-- Lecturer Registration -->
     <section id="register">
         <h2>Register New Lecturer</h2>
-
         <form id="lecturerForm">
-
             <div>
                 <label for="lecturerID">Lecturer ID:</label>
-                <input type="text" id="lecturerID" name="lecturerID">
+                <input type="text" id="lecturerID" name="lecturerID" required maxlength="40">
             </div>
-
             <div>
                 <label for="fullName">Full Name:</label>
-                <input type="text" id="fullName" name="fullName">
+                <input type="text" id="fullName" name="fullName" required maxlength="100">
             </div>
-
             <div>
                 <label for="email">Email Address:</label>
-                <input type="email" id="email" name="email">
+                <input type="email" id="email" name="email" required maxlength="254">
             </div>
-
             <div>
                 <label for="department">Department:</label>
-                <select id="department" name="department">
+                <select id="department" name="department" required>
                     <option value="">Select Department</option>
                     <option value="Computer Science">Computer Science</option>
                     <option value="Business">Business</option>
                     <option value="Mathematics">Mathematics</option>
                 </select>
             </div>
-
             <div>
                 <button type="submit">Register Lecturer</button>
                 <button type="reset">Clear Form</button>
             </div>
-
         </form>
+        <p id="lecturerFeedback" role="status" aria-live="polite"></p>
     </section>
 
-    <!-- Lecturer Records -->
     <section id="lecturers">
         <h2>Lecturer Records</h2>
-
-        <input
-            type="text"
-            id="searchLecturer"
-            placeholder="Search by lecturer name or ID..."
-        >
-
-        <table border="1">
-            <tr>
-                <th>Lecturer ID</th>
-                <th>Full Name</th>
-                <th>Email</th>
-                <th>Department</th>
-                <th>Actions</th>
-            </tr>
-
-            <tr>
-                <td>LEC001</td>
-                <td>John Kamau</td>
-                <td>john@example.com</td>
-                <td>Computer Science</td>
-                <td>
-                    <button>Edit</button>
-                    <button>Delete</button>
-                </td>
-            </tr>
+        <label for="searchLecturer">Search lecturers</label>
+        <input type="search" id="searchLecturer" placeholder="Search by lecturer name or ID...">
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Lecturer ID</th>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="lecturerRows"></tbody>
         </table>
     </section>
 
-    <!-- Account Management -->
     <section id="accounts">
         <h2>Account Management</h2>
-
-        <table border="1">
-            <tr>
-                <th>Account ID</th>
-                <th>Lecturer Name</th>
-                <th>Username</th>
-                <th>Account Status</th>
-                <th>Actions</th>
-            </tr>
-
-            <tr>
-                <td>ACC001</td>
-                <td>John Kamau</td>
-                <td>johnkamau</td>
-                <td>Active</td>
-                <td>
-                    <button>Deactivate</button>
-                </td>
-            </tr>
-        </table>
+        <p>Account management will be available after authentication and account APIs are implemented.</p>
     </section>
-
 </main>
-
-<script src="script.js"></script>
-
+<script src="script.js" defer></script>
 </body>
 </html>
